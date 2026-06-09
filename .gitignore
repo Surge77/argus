@@ -50,6 +50,9 @@ AGENTS.md
 *.session.md
 .claude/
 
+# development documentation (kept local, not published)
+/docs/
+
 # local verification artifacts
 /.playwright-mcp/
 /home.png

@@ -81,18 +81,15 @@ runs with graceful degradation if a provider key is missing or a provider is dow
 See [`.env.example`](.env.example) for the full list. Required keys are validated at
 startup; missing required keys fail fast with a clear message.
 
-## Documentation
+## Contributing
 
-- **[Architecture](docs/architecture.md)** — data flow, the adapter pattern, caching.
-- **[API reference](docs/api.md)** — route handlers and response envelopes.
-- **[Contributing](CONTRIBUTING.md)** — setup, conventions, and PR process.
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for local setup, conventions, and the PR process.
 
 ## Security & privacy
 
 ChainLens never asks you to connect a wallet or sign anything. It only reads public
 on-chain data for the address you enter. Addresses are used to key a short-lived cache and
-are never linked to you in logs or analytics. See
-[Architecture › Security](docs/architecture.md#security) for details.
+are never linked to you in logs or analytics.
 
 ## License
 
