@@ -49,6 +49,7 @@ export const ETH_TOKEN_PRICE_IDS: Record<string, string> = {
 /** Outbound host allowlist (SSRF defence). */
 export const ALLOWED_HOSTS = new Set<string>([
   "eth-mainnet.g.alchemy.com",
+  "ethereum-rpc.publicnode.com",
   "api.etherscan.io",
   "mainnet.helius-rpc.com",
   "api.helius.xyz",

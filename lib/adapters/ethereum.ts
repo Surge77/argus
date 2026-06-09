@@ -13,6 +13,11 @@ import type { TokenHolding, Transaction, WalletOverview } from "@/types";
 const { decimals, coingeckoId } = NATIVE_ASSET.ethereum;
 
 const rpcUrl = () => `https://eth-mainnet.g.alchemy.com/v2/${env.alchemyApiKey}`;
+/** Keyless public RPC fallback for native balance when Alchemy is unavailable. */
+const PUBLIC_RPC = "https://ethereum-rpc.publicnode.com";
+
+/** Prices are best-effort: a provider 429/outage should null USD values, not fail the wallet. */
+const safePrices = (ids: string[]) => getPrices(ids).catch(() => ({}));
 
 export interface RawTokenBalance {
   contractAddress: string;
@@ -119,31 +124,51 @@ interface AssetTransfersResult {
   }[];
 }
 
+/** Native balance via Alchemy, falling back to a keyless public RPC. */
+async function fetchEthBalance(address: string): Promise<string> {
+  try {
+    return await rpcCall<string>(rpcUrl(), "eth_getBalance", [address, "latest"]);
+  } catch {
+    return rpcCall<string>(PUBLIC_RPC, "eth_getBalance", [address, "latest"]);
+  }
+}
+
+/**
+ * Token balances + metadata via Alchemy. Degrades to an empty list (not an error) when
+ * Alchemy is unavailable — token enrichment is Alchemy-specific, so a public-RPC fallback
+ * can't replace it, but the overview should still render the native balance.
+ */
+async function fetchEthTokens(address: string): Promise<RawTokenBalance[]> {
+  try {
+    const url = rpcUrl();
+    const balances = await rpcCall<TokenBalancesResult>(url, "alchemy_getTokenBalances", [
+      address,
+    ]);
+    const nonZero = balances.tokenBalances
+      .filter((b) => b.tokenBalance && BigInt(b.tokenBalance) > 0n)
+      .slice(0, MAX_TOKENS);
+    return Promise.all(
+      nonZero.map(async (b) => ({
+        contractAddress: b.contractAddress,
+        rawBalanceHex: b.tokenBalance as string,
+        metadata: await rpcCall<TokenMetadataResult>(url, "alchemy_getTokenMetadata", [
+          b.contractAddress,
+        ]),
+      })),
+    );
+  } catch {
+    return [];
+  }
+}
+
 export async function fetchEthereumOverview(address: string): Promise<WalletOverview> {
-  const url = rpcUrl();
-  const [weiHex, balances, nativePrices] = await Promise.all([
-    rpcCall<string>(url, "eth_getBalance", [address, "latest"]),
-    rpcCall<TokenBalancesResult>(url, "alchemy_getTokenBalances", [address]),
-    getPrices([coingeckoId]),
+  const [weiHex, items, nativePrices, tokenPrices] = await Promise.all([
+    fetchEthBalance(address),
+    fetchEthTokens(address),
+    safePrices([coingeckoId]),
+    safePrices(Object.values(ETH_TOKEN_PRICE_IDS)),
   ]);
-
-  const nonZero = balances.tokenBalances
-    .filter((b) => b.tokenBalance && BigInt(b.tokenBalance) > 0n)
-    .slice(0, MAX_TOKENS);
-
-  const items: RawTokenBalance[] = await Promise.all(
-    nonZero.map(async (b) => ({
-      contractAddress: b.contractAddress,
-      rawBalanceHex: b.tokenBalance as string,
-      metadata: await rpcCall<TokenMetadataResult>(url, "alchemy_getTokenMetadata", [
-        b.contractAddress,
-      ]),
-    })),
-  );
-
-  const tokenPrices = await getPrices(Object.values(ETH_TOKEN_PRICE_IDS));
   const tokens = transformEthereumTokens(items, tokenPrices);
-
   return transformEthereumOverview(
     address,
     weiHex,

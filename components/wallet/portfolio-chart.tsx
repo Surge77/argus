@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useChart } from "@/hooks/use-wallet";
 import { NATIVE_ASSET } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency, formatPercent } from "@/lib/utils";
 import type { ChartPeriod } from "@/types";
 
 const ChartInner = dynamic(() => import("@/components/wallet/chart-inner"), {
@@ -27,12 +27,37 @@ export function PortfolioChart({
   const [period, setPeriod] = useState<ChartPeriod>("30d");
   const { data, isLoading, isError } = useChart(address, period);
 
+  const points = data?.points ?? [];
+  const current = points.at(-1)?.usd ?? null;
+  const first = points[0]?.usd ?? null;
+  const changePct =
+    current !== null && first ? ((current - first) / first) * 100 : null;
+
   return (
     <Card className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-muted">
-          {NATIVE_ASSET[chain].symbol} price
-        </h2>
+      <div className="flex items-start justify-between">
+        <div>
+          <h2 className="text-sm font-medium text-muted">
+            {NATIVE_ASSET[chain].symbol} price
+          </h2>
+          {current !== null && (
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="font-mono text-xl font-semibold tabular-nums">
+                {formatCurrency(current)}
+              </span>
+              {changePct !== null && (
+                <span
+                  className={cn(
+                    "font-mono text-xs tabular-nums",
+                    changePct >= 0 ? "text-positive" : "text-negative",
+                  )}
+                >
+                  {formatPercent(changePct)}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
         <div className="flex gap-1">
           {PERIODS.map((p) => (
             <button
