@@ -55,5 +55,6 @@ AGENTS.md
 
 # local verification artifacts
 /.playwright-mcp/
-/home.png
-/btc-dashboard.png
+/*.png
+/probe.mjs
+/flush.mjs

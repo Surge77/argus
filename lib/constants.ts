@@ -46,6 +46,19 @@ export const ETH_TOKEN_PRICE_IDS: Record<string, string> = {
   "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": "wrapped-bitcoin", // WBTC
 };
 
+/** Symbols treated as stablecoins for the stablecoin-share metric. */
+export const STABLECOIN_SYMBOLS = new Set<string>([
+  "USDC",
+  "USDT",
+  "DAI",
+  "BUSD",
+  "TUSD",
+  "USDP",
+  "FRAX",
+  "USDE",
+  "PYUSD",
+]);
+
 /** Outbound host allowlist (SSRF defence). */
 export const ALLOWED_HOSTS = new Set<string>([
   "eth-mainnet.g.alchemy.com",

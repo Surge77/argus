@@ -1,4 +1,5 @@
 import { CopyLink } from "@/components/wallet/copy-link";
+import { Insights } from "@/components/wallet/insights";
 import { OverviewCard } from "@/components/wallet/overview-card";
 import { PortfolioChart } from "@/components/wallet/portfolio-chart";
 import { TokenTable } from "@/components/wallet/token-table";
@@ -21,6 +22,7 @@ export function Dashboard({ overview }: { overview: WalletOverview }) {
         <OverviewCard overview={overview} />
         <PortfolioChart address={address} chain={chain} />
       </div>
+      <Insights overview={overview} />
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-medium text-muted">Token holdings</h2>
         <TokenTable tokens={overview.tokens} />

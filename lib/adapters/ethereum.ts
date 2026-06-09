@@ -17,7 +17,8 @@ const rpcUrl = () => `https://eth-mainnet.g.alchemy.com/v2/${env.alchemyApiKey}`
 const PUBLIC_RPC = "https://ethereum-rpc.publicnode.com";
 
 /** Prices are best-effort: a provider 429/outage should null USD values, not fail the wallet. */
-const safePrices = (ids: string[]) => getPrices(ids).catch(() => ({}));
+const safePrices = (ids: string[]): Promise<Record<string, PriceInfo>> =>
+  getPrices(ids).catch(() => ({}));
 
 export interface RawTokenBalance {
   contractAddress: string;
@@ -183,7 +184,9 @@ export async function fetchEthereumTransactions(address: string): Promise<Transa
   const common = {
     fromBlock: "0x0",
     toBlock: "latest",
-    category: ["external", "erc20"],
+    // Native ETH transfers only — ERC-20 values are in token units and would corrupt
+    // native-denominated flow/fee metrics and the "± ETH" display.
+    category: ["external"],
     order: "desc",
     maxCount: "0x" + TX_PAGE_SIZE.toString(16),
     withMetadata: true,
