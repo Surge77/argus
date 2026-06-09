@@ -49,3 +49,8 @@ AGENTS.md
 /plans/
 *.session.md
 .claude/
+
+# local verification artifacts
+/.playwright-mcp/
+/home.png
+/btc-dashboard.png
