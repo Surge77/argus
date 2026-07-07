@@ -23,34 +23,36 @@ export function TransactionList({ address, chain }: { address: string; chain: Ch
     );
   }
   if (isError || !data) {
-    return <Card className="text-sm text-negative">Could not load transactions.</Card>;
+    return <Card className="font-mono text-sm text-down">Could not load transactions.</Card>;
   }
   if (data.transactions.length === 0) {
-    return <Card className="text-sm text-muted">No recent transactions.</Card>;
+    return <Card className="text-sm text-dim">No recent transactions.</Card>;
   }
 
   return (
-    <Card className="flex flex-col divide-y divide-border/50 p-0">
+    <Card className="flex flex-col divide-y divide-line/50 p-0">
       {data.transactions.map((tx) => {
         const incoming = tx.type === "receive";
         return (
           <a
             key={tx.hash}
             href={`#${tx.hash}`}
-            className="flex items-center justify-between px-4 py-3 hover:bg-surface-elevated"
+            className="flex items-center justify-between px-4 py-3 transition-colors hover:bg-raised/60"
           >
             <div className="flex items-center gap-3">
               <span
                 className={cn(
-                  "flex h-8 w-8 items-center justify-center rounded-sm",
-                  incoming ? "bg-positive/10 text-positive" : "bg-negative/10 text-negative",
+                  "flex h-8 w-8 items-center justify-center rounded-sm border",
+                  incoming
+                    ? "border-up/30 bg-up/10 text-up"
+                    : "border-down/30 bg-down/10 text-down",
                 )}
               >
                 {incoming ? <ArrowDownLeft size={16} /> : <ArrowUpRight size={16} />}
               </span>
               <div>
                 <div className="text-sm capitalize">{tx.type.replace("_", " ")}</div>
-                <div className="font-mono text-xs text-muted">{truncateAddress(tx.hash)}</div>
+                <div className="font-mono text-xs text-dim">{truncateAddress(tx.hash)}</div>
               </div>
             </div>
             <div className="text-right">
@@ -58,7 +60,7 @@ export function TransactionList({ address, chain }: { address: string; chain: Ch
                 {incoming ? "+" : "-"}
                 {Number(tx.value).toLocaleString(undefined, { maximumFractionDigits: 6 })} {symbol}
               </div>
-              <div className="text-xs text-muted">
+              <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-dim">
                 {new Date(tx.timestamp).toLocaleDateString()}
               </div>
             </div>

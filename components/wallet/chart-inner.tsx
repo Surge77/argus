@@ -19,21 +19,20 @@ export default function ChartInner({ points }: { points: ChartPoint[] }) {
       <AreaChart data={points} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
         <defs>
           <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#00e5cc" stopOpacity={0.4} />
-            <stop offset="100%" stopColor="#00e5cc" stopOpacity={0} />
+            <stop offset="0%" stopColor="#c9a45c" stopOpacity={0.35} />
+            <stop offset="100%" stopColor="#c9a45c" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <XAxis
-          dataKey="t"
-          hide
-        />
+        <XAxis dataKey="t" hide />
         <YAxis domain={["auto", "auto"]} hide />
         <Tooltip
           contentStyle={{
-            background: "#14161a",
-            border: "1px solid #2a2e35",
+            background: "var(--surface)",
+            border: "1px solid var(--line-strong)",
             borderRadius: 4,
             fontSize: 12,
+            fontFamily: "var(--font-space-mono)",
+            color: "var(--starlight)",
           }}
           labelFormatter={(t) => new Date(t as string).toLocaleString()}
           formatter={(v) => [formatCurrency(Number(v)), "Price"]}
@@ -41,8 +40,8 @@ export default function ChartInner({ points }: { points: ChartPoint[] }) {
         <Area
           type="monotone"
           dataKey="usd"
-          stroke="#00e5cc"
-          strokeWidth={2}
+          stroke="#c9a45c"
+          strokeWidth={1.75}
           fill="url(#fill)"
         />
       </AreaChart>

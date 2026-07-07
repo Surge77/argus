@@ -28,8 +28,8 @@ export function WalletSearch({ autoFocus = false }: { autoFocus?: boolean }) {
 
   return (
     <form onSubmit={onSubmit} className="w-full">
-      <div className="flex items-center gap-2 rounded-sm border border-border bg-surface px-3 focus-within:border-accent">
-        <Search size={18} className="text-muted" />
+      <div className="lens flex items-center gap-2.5 rounded-sm px-3.5 transition-colors focus-within:border-brass/60">
+        <Search size={16} className="shrink-0 text-brass" />
         <input
           autoFocus={autoFocus}
           value={value}
@@ -40,17 +40,17 @@ export function WalletSearch({ autoFocus = false }: { autoFocus?: boolean }) {
           spellCheck={false}
           placeholder="Paste an ETH, SOL, or BTC address…"
           aria-label="Wallet address"
-          className="flex-1 bg-transparent py-3 font-mono text-sm outline-none placeholder:text-muted"
+          className="flex-1 bg-transparent py-3.5 font-mono text-sm outline-none placeholder:text-dim"
         />
         <button
           type="submit"
-          className="rounded-sm bg-accent px-4 py-1.5 text-sm font-medium text-accent-foreground hover:opacity-90"
+          className="rounded-sm bg-brass px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-[0.18em] text-brassink transition-colors hover:bg-brassbright"
         >
           View
         </button>
       </div>
       {error && (
-        <p role="alert" className="mt-2 text-sm text-negative">
+        <p role="alert" className="mt-2.5 font-mono text-xs text-down">
           {error}
         </p>
       )}

@@ -20,12 +20,12 @@ export function DashboardLive({ address }: { address: string }) {
   if (isError || !data) {
     return (
       <Card className="flex flex-col items-start gap-3">
-        <p className="text-sm text-negative">
+        <p className="font-mono text-sm text-down">
           Could not load this wallet. A data provider may be temporarily unavailable.
         </p>
         <button
           onClick={() => refetch()}
-          className="rounded-sm bg-accent px-3 py-1.5 text-sm font-medium text-accent-foreground"
+          className="rounded-sm bg-brass px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-[0.18em] text-brassink transition-colors hover:bg-brassbright"
         >
           Retry
         </button>
