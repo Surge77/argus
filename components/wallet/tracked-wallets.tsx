@@ -26,9 +26,9 @@ export function TrackedWallets() {
   const visible = filter === "all" ? wallets : wallets.filter((w) => w.chain === filter);
 
   return (
-    <div className="mt-12 w-full">
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-xs font-medium uppercase tracking-wider text-muted">
+    <div className="rise rise-4 mt-14 w-full text-left">
+      <div className="mb-3 flex items-center justify-between border-b border-line pb-2.5">
+        <h2 className="font-mono text-[10px] uppercase tracking-[0.3em] text-dim">
           Your wallets
         </h2>
         <div className="flex gap-1">
@@ -37,10 +37,10 @@ export function TrackedWallets() {
               key={f.key}
               onClick={() => setFilter(f.key)}
               className={cn(
-                "rounded-sm px-2 py-1 font-mono text-xs",
+                "rounded-sm px-2 py-1 font-mono text-xs transition-colors",
                 f.key === filter
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted hover:bg-surface",
+                  ? "bg-brass font-bold text-brassink"
+                  : "text-dim hover:text-starlight",
               )}
             >
               {f.label}
@@ -49,9 +49,12 @@ export function TrackedWallets() {
         </div>
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
-        {visible.map((w) => (
+        {visible.map((w, i) => (
           <Link key={w.address} href={`/${w.address}`}>
-            <Card className="flex items-center gap-3 py-3 hover:border-accent">
+            <Card className="flex items-center gap-3 py-3 transition-colors hover:border-linestrong">
+              <span aria-hidden className="font-mono text-[10px] text-brass">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <ChainBadge chain={w.chain} />
               <span className="truncate font-mono text-sm">
                 {w.label ?? truncateAddress(w.address)}

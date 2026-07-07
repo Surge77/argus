@@ -24,9 +24,11 @@ const SAMPLE = 25;
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <Card className="flex flex-col gap-1 p-4">
-      <span className="text-xs text-muted">{label}</span>
-      <span className="font-mono text-lg font-semibold tabular-nums">{value}</span>
+    <Card className="flex flex-col gap-1.5 p-4">
+      <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-dim">
+        {label}
+      </span>
+      <span className="font-mono text-lg font-bold tabular-nums">{value}</span>
     </Card>
   );
 }
@@ -44,7 +46,12 @@ export function Insights({ overview }: { overview: WalletOverview }) {
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-sm font-medium text-muted">Insights</h2>
+      <h2 className="flex items-baseline gap-2 border-b border-line pb-2 font-mono text-[10px] uppercase tracking-[0.3em] text-dim">
+        <span aria-hidden className="text-brass">
+          Obs. 01
+        </span>
+        Insights
+      </h2>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
         <Stat label="Total value" value={formatCurrency(p.totalUsd)} />
         <Stat label="Tokens (priced)" value={`${p.pricedCount}/${p.tokenCount}`} />
@@ -60,20 +67,22 @@ export function Insights({ overview }: { overview: WalletOverview }) {
       {alloc.length > 0 && (
         <Card className="grid gap-4 md:grid-cols-2">
           <div>
-            <h3 className="mb-2 text-sm font-medium text-muted">Allocation by value</h3>
+            <h3 className="mb-2 font-mono text-[10px] uppercase tracking-[0.25em] text-dim">
+              Allocation by value
+            </h3>
             <AllocationDonut data={alloc} />
           </div>
-          <ul className="flex flex-col justify-center gap-2">
+          <ul className="flex flex-col justify-center gap-2.5">
             {alloc.map((slice, i) => (
               <li key={slice.label} className="flex items-center justify-between text-sm">
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2.5">
                   <span
-                    className="inline-block h-3 w-3 rounded-sm"
+                    className="inline-block h-2.5 w-2.5"
                     style={{ background: ALLOCATION_COLORS[i % ALLOCATION_COLORS.length] }}
                   />
                   {slice.label}
                 </span>
-                <span className="font-mono tabular-nums text-muted">
+                <span className="font-mono tabular-nums text-dim">
                   {formatCurrency(slice.value)}
                 </span>
               </li>
@@ -83,7 +92,7 @@ export function Insights({ overview }: { overview: WalletOverview }) {
       )}
 
       {p.stablecoinUsd > 0 && (
-        <p className={cn("text-xs text-muted")}>
+        <p className={cn("font-mono text-xs text-dim")}>
           Stablecoins: {formatCurrency(p.stablecoinUsd)} (
           {((p.stablecoinUsd / p.totalUsd) * 100).toFixed(1)}% of portfolio)
         </p>

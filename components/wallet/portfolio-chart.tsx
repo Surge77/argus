@@ -37,19 +37,19 @@ export function PortfolioChart({
     <Card className="flex flex-col gap-4">
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-sm font-medium text-muted">
+          <h2 className="font-mono text-[10px] uppercase tracking-[0.3em] text-dim">
             {NATIVE_ASSET[chain].symbol} price
           </h2>
           {current !== null && (
-            <div className="mt-1 flex items-baseline gap-2">
-              <span className="font-mono text-xl font-semibold tabular-nums">
+            <div className="mt-1.5 flex items-baseline gap-2">
+              <span className="font-mono text-xl font-bold tabular-nums">
                 {formatCurrency(current)}
               </span>
               {changePct !== null && (
                 <span
                   className={cn(
                     "font-mono text-xs tabular-nums",
-                    changePct >= 0 ? "text-positive" : "text-negative",
+                    changePct >= 0 ? "text-up" : "text-down",
                   )}
                 >
                   {formatPercent(changePct)}
@@ -64,10 +64,10 @@ export function PortfolioChart({
               key={p}
               onClick={() => setPeriod(p)}
               className={cn(
-                "rounded-sm px-2 py-1 font-mono text-xs",
+                "rounded-sm px-2 py-1 font-mono text-xs transition-colors",
                 p === period
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted hover:bg-surface-elevated",
+                  ? "bg-brass font-bold text-brassink"
+                  : "text-dim hover:text-starlight",
               )}
             >
               {p}
@@ -78,7 +78,7 @@ export function PortfolioChart({
       {isLoading ? (
         <Skeleton className="h-[240px] w-full" />
       ) : isError || !data ? (
-        <div className="flex h-[240px] items-center justify-center text-sm text-negative">
+        <div className="flex h-[240px] items-center justify-center font-mono text-sm text-down">
           Could not load chart.
         </div>
       ) : (

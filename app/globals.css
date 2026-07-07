@@ -1,38 +1,162 @@
 @import "tailwindcss";
 
-/* Argus design tokens — dark-first, precision aesthetic */
+/* ---------------------------------------------------------------------------
+   Argus design tokens — "night observatory".
+   Deep night ink, aged-brass instrument accent, starlight text.
+--------------------------------------------------------------------------- */
 :root {
-  --background: #0a0b0d;
-  --surface: #14161a;
-  --surface-elevated: #1c1f24;
-  --border: #2a2e35;
-  --foreground: #e6e8eb;
-  --muted: #8b919a;
-  --accent: #00e5cc;
-  --accent-foreground: #04211d;
-  --positive: #3ddc84;
-  --negative: #ff5c5c;
+  --night: #0c0e13;
+  --surface: #12151d;
+  --raised: #1a1e29;
+  --line: #232838;
+  --line-strong: #39405a;
+  --starlight: #e9e5d8;
+  --dim: #8e8b7d;
+  --brass: #c9a45c;
+  --brass-bright: #e8c87e;
+  --brass-ink: #16120a;
+  --up: #6fb98a;
+  --down: #d96a55;
   --radius: 4px;
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-night: var(--night);
   --color-surface: var(--surface);
-  --color-surface-elevated: var(--surface-elevated);
-  --color-border: var(--border);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-positive: var(--positive);
-  --color-negative: var(--negative);
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-jetbrains-mono);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-linestrong: var(--line-strong);
+  --color-starlight: var(--starlight);
+  --color-dim: var(--dim);
+  --color-brass: var(--brass);
+  --color-brassbright: var(--brass-bright);
+  --color-brassink: var(--brass-ink);
+  --color-up: var(--up);
+  --color-down: var(--down);
+  --font-display: var(--font-instrument-serif);
+  --font-sans: var(--font-instrument-sans);
+  --font-mono: var(--font-space-mono);
   --radius-sm: var(--radius);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background:
+    radial-gradient(ellipse 900px 480px at 50% -80px, rgba(201, 164, 92, 0.07), transparent),
+    radial-gradient(rgba(233, 229, 216, 0.055) 1px, transparent 1px),
+    var(--night);
+  background-size:
+    auto,
+    26px 26px,
+    auto;
+  color: var(--starlight);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+   Lens plate: cards framed like an instrument viewfinder — brass corner
+   brackets that brighten when the plate is hovered.
+--------------------------------------------------------------------------- */
+.lens {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.lens::before,
+.lens::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
+}
+
+.lens::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1.5px solid var(--brass);
+  border-left: 1.5px solid var(--brass);
+}
+
+.lens::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1.5px solid var(--brass);
+  border-bottom: 1.5px solid var(--brass);
+}
+
+.lens:hover::before,
+.lens:hover::after {
+  opacity: 1;
+}
+
+/* Staggered page-load reveal. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rise-1 {
+  animation-delay: 0.07s;
+}
+.rise-2 {
+  animation-delay: 0.15s;
+}
+.rise-3 {
+  animation-delay: 0.24s;
+}
+.rise-4 {
+  animation-delay: 0.34s;
+}
+
+/* Iris: slow-breathing concentric rings on the hero eye. */
+@keyframes iris-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+.iris {
+  animation: iris-pulse 5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes iris-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.iris-ring {
+  animation: iris-spin 40s linear infinite;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
